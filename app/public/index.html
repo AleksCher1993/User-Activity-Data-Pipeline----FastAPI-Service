@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Activity Data Pipeline</title>
+</head>
+
+<body>
+    <h1>Welcome to the User Activity Data Pipeline</h1>
+    <p>This application processes and analyzes user activity data.</p>
+    <button onclick="startPipeline()">Start Data Pipeline</button>
+    <script defer>
+        async function startPipeline() {
+            try {
+                const response = await fetch('/users', { method: 'GET' });
+                if(response.ok) {
+                    const users = await response.json();
+                    console.log('Fetched users:', users);
+                } else {
+                    console.error('Failed to fetch users:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error starting pipeline:', error);
+                alert('Failed to start pipeline.');
+            }
+        }
+
+    </script>
+</body>
+
+</html>

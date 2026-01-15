@@ -1,2 +1,2 @@
-# User-Activity-Data-Pipeline -- FastAPI Service
+# User-Activity-Data-Pipeline -> FastAPI Service
 
