@@ -1,5 +1,6 @@
 import requests
 import logging
+from app.exceptions.custom import ExternalServiceUnavailable
 logger = logging.getLogger(__name__)
 
 
@@ -13,8 +14,7 @@ def fetch_user_data(URL_user:str):
             logger.info(f"Successfully fetched user data from {URL_user}")
             return users_data
     except requests.RequestException as e:
-        logger.error(f"Error fetching user data: {e}")
-        return None
+        raise ExternalServiceUnavailable(str(e))
 
 def fetch_posts_data(URL_posts:str):
     logger.info(f"Fetching posts data from {URL_posts}")
@@ -26,5 +26,4 @@ def fetch_posts_data(URL_posts:str):
             logger.info(f"Successfully fetched posts data from {URL_posts}")
             return posts_data
     except requests.RequestException as e:
-        logger.error(f"Error fetching posts data: {e}")
-        return None
+        raise ExternalServiceUnavailable(str(e))

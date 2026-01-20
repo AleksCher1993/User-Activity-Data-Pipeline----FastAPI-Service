@@ -1,5 +1,8 @@
 from app.services.processor import get_posts, get_top_activity, get_users, get_users_activity
 class UserActivityService:
+    def __init__(self,users,posts):
+        self.users=users
+        self.posts=posts
     def get_users(self):
         return get_users()
     def get_posts(self):

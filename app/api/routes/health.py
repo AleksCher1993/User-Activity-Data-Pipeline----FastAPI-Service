@@ -1,4 +1,4 @@
-from fastapi import APIRouter,Request
+from fastapi import APIRouter
 import logging
 logger = logging.getLogger(__name__)
 router=APIRouter(
@@ -8,6 +8,5 @@ router=APIRouter(
 )
 
 @router.get("/")
-def health_check(request:Request):
-    logger.info(f"You went to {request.url.path}")
+def health_check():
     return {"status": "ok"}
