@@ -1,5 +1,5 @@
 
-from fastapi import FastAPI,Request
+from fastapi import FastAPI
 from fastapi.responses import FileResponse
 import logging
 from app.utils.logger import logger_init
@@ -18,8 +18,8 @@ app.include_router(users.router)
 app.include_router(posts.router)
 app.include_router(health.router)
 @app.get("/")
-def get_root(request:Request):
-    logger.info(f"You went to {request.url.path}")
+def get_root():
+
     return FileResponse("app/public/index.html")
 
 

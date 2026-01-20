@@ -1,18 +1,23 @@
-from app.services.processor import get_posts, get_top_activity, get_users, get_users_activity
-class UserActivityService:
-    def __init__(self,users,posts):
-        self.users=users
-        self.posts=posts
-    def get_users(self):
-        return get_users()
-    def get_posts(self):
-        return get_posts()
-    def get_users_activity(self):
-        users=get_users()
-        posts=get_posts()
-        return get_users_activity(users,posts)
-    def get_top_activity(self,limit:int):
-        activity=self.get_users_activity()
-        return get_top_activity(activity,limit)
-def get_user_activity_service():    
-    return UserActivityService()
+from fastapi import Depends
+from app.core.config import settings
+from app.services.fetcher import fetch_user_data, fetch_posts_data
+from app.services.clients import UsersClient, PostsClient
+from app.services.service import UserActivityService
+
+
+def get_users_client():
+    users = fetch_user_data(settings.URL_USER)
+    return UsersClient(users)
+
+
+def get_posts_client():
+    posts = fetch_posts_data(settings.URL_POSTS)
+    return PostsClient(posts)
+
+
+def get_user_activity_service(
+    users_client: UsersClient = Depends(get_users_client),
+    posts_client: PostsClient = Depends(get_posts_client),
+):
+    return UserActivityService(users_client, posts_client)
+
