@@ -1,38 +1,25 @@
 
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 from fastapi.responses import FileResponse
 import logging
-
 from app.utils.logger import logger_init
-from app.services.processor import (
-    get_users as get_users_service, 
-    get_posts as get_posts_service,
-    get_users_activity as get_users_activity_service)
-
+from app.api.routes import health,users,posts
+from app.middleware.timing import timing_middleware
 logger_init()
 logger=logging.getLogger(__name__)
 
 app = FastAPI()
-# root endpoint serving static files
+
+app.middleware("http")(timing_middleware)
+
+app.include_router(users.router)
+app.include_router(posts.router)
+app.include_router(health.router)
 @app.get("/")
-def root():
+def get_root(request:Request):
+    logger.info(f"You went to {request.url.path}")
     return FileResponse("app/public/index.html")
 
-@app.get("/health")
-def health():
-    return {"status": "ok"}
-# users endpoints
-@app.get("/users")
-def get_users_endpoint():
-    return get_users_service()
-@app.get("/users/activity")
-def get_user_activity_endpoint():
-    users = get_users_service()
-    posts = get_posts_service()
-    return get_users_activity_service(users, posts)
 
-# posts endpoints
-@app.get("/posts")
-def get_posts_endpoint():
-    return get_posts_service()
+
 
