@@ -1,10 +1,9 @@
-import logging
+
 from typing import List
 from app.core.dependencies import UserActivityService, get_user_activity_service
 from fastapi import APIRouter, Query, Depends
 
 from app.models.schemas import UserActivity
-logger = logging.getLogger(__name__)
 
 
 router = APIRouter(

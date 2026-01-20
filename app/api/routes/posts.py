@@ -1,7 +1,7 @@
-import logging
+
 from app.core.dependencies import UserActivityService, get_user_activity_service
 from fastapi import APIRouter, Depends
-logger = logging.getLogger(__name__)
+
 
 router=APIRouter(
     prefix="/posts",
