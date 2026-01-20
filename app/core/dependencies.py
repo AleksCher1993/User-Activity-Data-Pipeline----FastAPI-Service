@@ -1,5 +1,6 @@
 from fastapi import Depends
 from app.core.config import settings
+from app.exceptions.custom import ExternalServiceUnavailable
 from app.services.fetcher import fetch_user_data, fetch_posts_data
 from app.services.clients import UsersClient, PostsClient
 from app.services.health import HealthService
@@ -7,13 +8,19 @@ from app.services.service import UserActivityService
 
 
 def get_users_client():
-    users = fetch_user_data(settings.URL_USER)
-    return UsersClient(users)
+    try:
+        users = fetch_user_data(settings.URL_USER)
+        return UsersClient(users)
+    except ExternalServiceUnavailable as e:
+        return UsersClient(error=e)
 
 
 def get_posts_client():
-    posts = fetch_posts_data(settings.URL_POSTS)
-    return PostsClient(posts)
+    try:
+        posts = fetch_posts_data(settings.URL_POSTS)
+        return PostsClient(posts)
+    except ExternalServiceUnavailable as e:
+        return PostsClient(error=e)
 
 def get_health_service(
     users_client=Depends(get_users_client),

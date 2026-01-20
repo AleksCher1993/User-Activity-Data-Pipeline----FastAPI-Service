@@ -5,20 +5,11 @@ class HealthService:
         self.posts_client = posts_client
     
     def check(self)->dict:
-        status={
-            "users_api":"ok",
-            "posts_api":"ok",
+        return {
+            "users_api":(
+                "ok" if self.users_client.is_available() else "unavailable"
+            ),
+            "posts_api":(
+                "ok" if self.posts_client.is_available() else "unavailable"
+            ),
         }
-        
-        try:
-            self.users_client.get_users()
-        
-        except Exception:
-            status["users_api"]="unavailable"
-            
-        try:
-            self.posts_client.get_posts()
-        except Exception:
-            status["posts_api"]="unavailable"
-        
-        return status
